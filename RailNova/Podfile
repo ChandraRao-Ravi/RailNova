@@ -1,0 +1,9 @@
+platform :ios, '16.0'
+
+target 'IrctcRailNova' do
+  use_frameworks!
+
+  pod 'Firebase/Core'
+  pod 'Firebase/Auth'
+  pod 'GoogleSignIn'
+end
