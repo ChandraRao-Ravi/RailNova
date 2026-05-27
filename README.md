@@ -43,7 +43,7 @@ Build an **iOS-first premium railway platform** with fast booking, clean UX, AI-
 | **Architecture** | MVVM + Clean Architecture |
 | **Async** | async/await + Combine |
 | **Auth** | Firebase Authentication |
-| **Backend** | Node.js / NestJS |
+| **Backend** | Node.js (Express, TypeScript) / NestJS (planned) |
 | **Database** | PostgreSQL + Redis |
 | **Payments** | Razorpay Sandbox |
 | **Deployment** | AWS / GCP |
@@ -133,7 +133,15 @@ open RailNova.xcodeproj
 
 > Requires Xcode 15+, iOS 17 SDK, Swift 5.9
 
+> 🔌 Backend: For local development, start the RailNova API mock server
+> from the `irctc-project-backend` repo (`npm run dev`) and point
+> the app’s `APIClient.baseURL` to `http://localhost:3000/api`.
+
 ---
+
+## 🔗 Related Projects
+
+- [RailNova API (Node.js backend)](https://github.com/ChandraRao-Ravi/irctc-project-backend)
 
 ## 👨‍💻 Author
 
