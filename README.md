@@ -62,6 +62,14 @@ Build an **iOS-first premium railway platform** with fast booking, clean UX, AI-
 
 ---
 
+## Firebase setup
+
+1. Create your own Firebase project.
+2. Download `GoogleService-Info.plist`.
+3. Add it to the iOS target in Xcode (not tracked in Git).
+
+---
+
 ## 🗂 Folder Structure
 
 ```
