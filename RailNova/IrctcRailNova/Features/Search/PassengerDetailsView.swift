@@ -12,6 +12,8 @@ struct PassengerDetailsView: View {
     let journeyDate: Date
     let travelClass: TravelClass
     let quota: Quota
+    let fromStation: Station
+    let toStation: Station
 
     @State private var passengers: [Passenger]
     @State private var contactEmail: String = ""
@@ -22,18 +24,25 @@ struct PassengerDetailsView: View {
     @State private var invalidPassengerIndices: Set<Int> = []
     @State private var isContactEmailInvalid = false
     @State private var isContactPhoneInvalid = false
+    @Binding var selectedTab: MainTab
 
     init(
         train: Train,
         journeyDate: Date,
         travelClass: TravelClass,
         quota: Quota,
-        initialPassengerCount: Int = 1
+        initialPassengerCount: Int = 1,
+        fromStation: Station,
+        toStation: Station,
+        selectedTab: Binding<MainTab>
     ) {
         self.train = train
         self.journeyDate = journeyDate
         self.travelClass = travelClass
         self.quota = quota
+        self.fromStation = fromStation
+        self.toStation = toStation
+        self._selectedTab = selectedTab
 
         let count = max(1, min(initialPassengerCount, 6)) // clamp 1…6
         _passengers = State(initialValue: (0..<count).map { _ in
@@ -126,7 +135,10 @@ struct PassengerDetailsView: View {
                     quota: quota,
                     passengers: passengers,
                     contactEmail: contactEmail,
-                    contactPhone: contactPhone
+                    contactPhone: contactPhone,
+                    fromStation: fromStation,
+                    toStation: toStation,
+                    selectedTab: $selectedTab
                 ),
                 isActive: $navigateToReview
             ) {

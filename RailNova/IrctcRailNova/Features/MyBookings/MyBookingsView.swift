@@ -5,7 +5,14 @@ import SwiftUI
 struct MyBookingsView: View {
     @State private var selectedTab = 0
     let tabs = ["Upcoming", "Completed", "Cancelled"]
+    @StateObject private var vm: MyBookingsViewModel
     
+    init(
+        authVM: AuthViewModel
+    ) {
+        _vm = StateObject(wrappedValue: MyBookingsViewModel(authVM: authVM))
+    }
+
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -35,6 +42,11 @@ struct MyBookingsView: View {
                 Text("Your bookings will appear here")
                     .foregroundColor(.railNovaTextMuted)
                 Spacer()
+            }
+            .onAppear {
+                Task {
+                    await vm.loadBookings()                    
+                }
             }
             .navigationTitle("My Bookings")
             .background(Color.railNovaBackground)

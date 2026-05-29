@@ -12,20 +12,29 @@ struct TrainDetailsView: View {
     let journeyDate: Date
     let travelClassFromSearch: TravelClass?
     let quota: Quota
-    
+    let fromStation: Station
+    let toStation: Station
+
     @State private var selectedClass: TrainClassAvailability?
-    
+    @Binding var selectedTab: MainTab
+
     init(
         train: Train,
         journeyDate: Date,
         selectedClass: TrainClassAvailability? = nil,
         quota: Quota,
-        travelClassFromSearch: TravelClass? = nil
+        travelClassFromSearch: TravelClass? = nil,
+        fromStation: Station,
+        toStation: Station,
+        selectedTab: Binding<MainTab>
     ) {
         self.train = train
         self.journeyDate = journeyDate
         self.quota = quota
         self.travelClassFromSearch = travelClassFromSearch
+        self.fromStation = fromStation
+        self.toStation = toStation
+        self._selectedTab = selectedTab
         self._selectedClass = State(initialValue: selectedClass)
     }
     
@@ -179,10 +188,12 @@ struct TrainDetailsView: View {
                         PassengerDetailsView(
                             train: train,
                             journeyDate: journeyDate,
-                            travelClass: selectedClass.code
-                            ,
+                            travelClass: selectedClass.code,
                             quota: quota,
-                            initialPassengerCount: 1  // optional, default is 1
+                            initialPassengerCount: 1, // optional, default is 1
+                            fromStation: fromStation,
+                            toStation: toStation,
+                            selectedTab: $selectedTab
                         )
                     } label: {
                         HStack {

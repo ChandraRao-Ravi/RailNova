@@ -7,25 +7,54 @@
 
 import SwiftUI
 
+enum MainTab {
+    case home
+    case search
+    case bookings
+    case profile
+}
+
 // MARK: - Main Tab View
 
 struct MainTabView: View {
+    @State private var selectedTab: MainTab = .home
+    @EnvironmentObject var authVM: AuthViewModel
+
     var body: some View {
-        TabView {
-            Tab("Home", systemImage: "house") {
-                NavigationStack { HomeView() }
+        TabView(selection: $selectedTab) {
+            NavigationStack {
+                HomeView()
             }
-            Tab("Search", systemImage: "magnifyingglass") {
-                NavigationStack { TrainSearchView() }
+            .tabItem {
+                Label("Home", systemImage: "house")
             }
-            Tab("Bookings", systemImage: "ticket") {
-                NavigationStack { MyBookingsView() }
+            .tag(MainTab.home)
+
+            NavigationStack {
+                TrainSearchView(selectedTab: $selectedTab)
             }
-            Tab("Profile", systemImage: "person.crop.circle") {
-                NavigationStack { ProfileView() }
+            .tabItem {
+                Label("Search", systemImage: "magnifyingglass")
             }
+            .tag(MainTab.search)
+
+            NavigationStack {
+                MyBookingsView(authVM: authVM)
+            }
+            .tabItem {
+                Label("Bookings", systemImage: "ticket")
+            }
+            .tag(MainTab.bookings)
+
+            NavigationStack {
+                ProfileView()
+            }
+            .tabItem {
+                Label("Profile", systemImage: "person.crop.circle")
+            }
+            .tag(MainTab.profile)
         }
-        .tint(.railNovaSecondary) // your accent color
+        .tint(.railNovaSecondary)
         .tabBarMinimizeBehavior(.never)
     }
 }

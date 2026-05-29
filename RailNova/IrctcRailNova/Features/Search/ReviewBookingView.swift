@@ -15,10 +15,14 @@ struct ReviewBookingView: View {
     let passengers: [Passenger]
     let contactEmail: String
     let contactPhone: String
+    let fromStation: Station
+    let toStation: Station
 
     @State private var selectedPaymentMethod: PaymentMethod = .upi
-    @State private var navigateToConfirmation = false
+    @State private var navigateToPayment = false
     @State private var booking: Booking?
+    @EnvironmentObject var authVM: AuthViewModel
+    @Binding var selectedTab: MainTab
 
     // Simple fare logic: per passenger fare
     private var baseFare: Double {
@@ -124,51 +128,31 @@ struct ReviewBookingView: View {
         .navigationTitle("Review Journey")
         .safeAreaInset(edge: .bottom) {
             VStack {
+                // Hidden NavigationLink driven by state
                 NavigationLink(
-                    destination: BookingConfirmationView(booking: booking),
-                    isActive: $navigateToConfirmation
+                    destination: PaymentView(
+                        train: train,
+                        journeyDate: journeyDate,
+                        fromStation: fromStation,
+                        toStation: toStation,
+                        totalFare: totalAmount,
+                        authVM: authVM
+                    ) { booking in
+                        selectedTab = MainTab.bookings
+                    },
+                    isActive: $navigateToPayment
                 ) {
                     EmptyView()
                 }
                 .hidden()
-
+                
+                // Visible button
                 RNPrimaryButton("Proceed to Pay", icon: "creditcard") {
-                    let newBooking = createMockBooking()
-                    self.booking = newBooking
-                    self.navigateToConfirmation = true
+                    navigateToPayment = true
                 }
             }
             .padding()
             .background(.ultraThinMaterial)
         }
-    }
-
-    private func createMockBooking() -> Booking {
-        // We don't have real seats now, so allocate placeholder seat numbers and use berthPreference
-        let passengerBookings: [PassengerBooking] = passengers.enumerated().map { index, passenger in
-            PassengerBooking(
-                id: UUID().uuidString,
-                passenger: passenger,
-                coachNumber: "CNF",            // placeholder coach
-                seatNumber: index + 1,         // placeholder seat number
-                berthType: passenger.berthPreference,
-                confirmationStatus: .confirmed
-            )
-        }
-
-        return Booking(
-            id: UUID().uuidString,
-            pnrNumber: String(Int.random(in: 1_000_000_000...9_999_999_999)),
-            train: train,
-            journeyDate: journeyDate,
-            passengers: passengerBookings,
-            travelClass: travelClass,
-            quota: quota,
-            totalFare: baseFare,
-            convenienceFee: convenienceFee,
-            status: .confirmed,
-            bookedAt: Date(),
-            chartStatus: .notPrepared
-        )
     }
 }

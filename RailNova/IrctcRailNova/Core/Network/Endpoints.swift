@@ -63,32 +63,60 @@ enum TrainEndpoint: Endpoint {
 // MARK: - Booking Endpoints
 
 enum BookingEndpoint: Endpoint {
-    case createBooking
-    case getBookings
+    case createBooking(BookingCreateRequest)
+    case getBookingsForUser(userId: String)
     case getBookingDetail(id: String)
     case cancelBooking(id: String)
     case pnrStatus(pnr: String)
     case fileTDR(bookingId: String)
-    
+
     var path: String {
         switch self {
-        case .createBooking: return "/bookings"
-        case .getBookings: return "/bookings"
-        case .getBookingDetail(let id): return "/bookings/\(id)"
-        case .cancelBooking(let id): return "/bookings/\(id)/cancel"
-        case .pnrStatus(let pnr): return "/pnr/\(pnr)"
-        case .fileTDR(let id): return "/bookings/\(id)/tdr"
+        case .createBooking:
+            return "/bookings"                         // POST /api/bookings
+        case .getBookingsForUser(let userId):
+            return "/users/\(userId)/bookings"         // GET /api/users/:userId/bookings
+        case .getBookingDetail(let id):
+            return "/bookings/\(id)"
+        case .cancelBooking(let id):
+            return "/bookings/\(id)/cancel"
+        case .pnrStatus(let pnr):
+            return "/pnr/\(pnr)"
+        case .fileTDR(let id):
+            return "/bookings/\(id)/tdr"
         }
     }
-    
+
     var method: HTTPMethod {
         switch self {
-        case .createBooking: return .post
-        case .cancelBooking, .fileTDR: return .patch
-        default: return .get
+        case .createBooking:            return .post
+        case .cancelBooking, .fileTDR:  return .patch
+        default:                        return .get
         }
     }
-    
-    var queryParams: [String: String]? { nil }
-    var body: [String: Any]? { nil }
+
+    var queryParams: [String: String]? {
+        switch self {
+        case .getBookingsForUser:
+            return nil   // userId is in path, no query
+        default:
+            return nil
+        }
+    }
+
+    var body: [String: Any]? {
+        switch self {
+        case .createBooking(let req):
+            return [
+                "userId": req.userId,
+                "trainNumber": req.trainNumber,
+                "journeyDate": req.journeyDate,
+                "from": req.from,
+                "to": req.to,
+                "totalFare": req.totalFare
+            ]
+        default:
+            return nil
+        }
+    }
 }

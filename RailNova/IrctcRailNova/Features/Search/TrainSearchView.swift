@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct TrainSearchView: View {
+    @Binding var selectedTab: MainTab
+
     @StateObject private var viewModel = TrainSearchViewModel()
     @State private var isShowingFromStationSheet = false
     @State private var isShowingToStationSheet = false
@@ -142,7 +144,12 @@ struct TrainSearchView: View {
                                         journeyDate: viewModel.journeyDate,
                                         selectedClass: nil,
                                         quota: viewModel.selectedQuota,
-                                        travelClassFromSearch: viewModel.selectedClass
+                                        travelClassFromSearch: viewModel.selectedClass,
+                                        fromStation: viewModel.fromStation ?? StationDirectory
+                                            .station(for: ""),
+                                        toStation: viewModel.toStation ?? StationDirectory
+                                            .station(for: ""),
+                                        selectedTab: $selectedTab
                                     )
                                 } label: {
                                     TrainResultCard(

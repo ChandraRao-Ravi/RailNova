@@ -6,7 +6,7 @@ final class APIClient {
     
     static let shared = APIClient()
     private let session: URLSession
-    private let baseURL = "http://localhost:3000/api"  // Replace with actual backend URL
+    private let baseURL = "https://rail-nova-backend-production.up.railway.app/api"
     
     private init() {
         let config = URLSessionConfiguration.default
