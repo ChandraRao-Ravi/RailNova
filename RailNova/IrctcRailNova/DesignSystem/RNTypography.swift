@@ -14,11 +14,14 @@ struct RNTypography {
     static let headlineSmall = Font.system(size: 18, weight: .semibold, design: .rounded)
     
     // MARK: - Body
-    static let bodyLarge = Font.system(size: 16, weight: .regular)
-    static let bodyMedium = Font.system(size: 14, weight: .regular)
-    static let bodySmall = Font.system(size: 12, weight: .regular)
+    static let bodyLarge = Font.system(size: 17, weight: .regular)
+    static let bodyMedium = Font.system(size: 15, weight: .regular)
+    static let bodySmall = Font.system(size: 13, weight: .regular)
     
     // MARK: - Label
+    static let buttonLarge = Font.system(size: 18, weight: .semibold)
+    static let buttonMedium = Font.system(size: 16, weight: .semibold)
+    
     static let labelLarge = Font.system(size: 14, weight: .medium)
     static let labelMedium = Font.system(size: 12, weight: .medium)
     static let labelSmall = Font.system(size: 10, weight: .medium)

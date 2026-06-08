@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F5FAF722FD6991B00AF9351 /* AuthenticationServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3F5FAF712FD6991B00AF9351 /* AuthenticationServices.framework */; };
 		485D3D388DB39F0246ACB00F /* Pods_IrctcRailNova.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9739F9900EC2D50230380733 /* Pods_IrctcRailNova.framework */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +33,7 @@
 		3F0DD12D2FC5DF8B00E13AA8 /* IrctcRailNova.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = IrctcRailNova.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F0DD13A2FC5DF8C00E13AA8 /* IrctcRailNovaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IrctcRailNovaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F0DD1442FC5DF8C00E13AA8 /* IrctcRailNovaUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = IrctcRailNovaUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3F5FAF712FD6991B00AF9351 /* AuthenticationServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AuthenticationServices.framework; path = System/Library/Frameworks/AuthenticationServices.framework; sourceTree = SDKROOT; };
 		9739F9900EC2D50230380733 /* Pods_IrctcRailNova.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_IrctcRailNova.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EA2C40D0699019D41B3E6D77 /* Pods-IrctcRailNova.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-IrctcRailNova.release.xcconfig"; path = "Target Support Files/Pods-IrctcRailNova/Pods-IrctcRailNova.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -62,6 +64,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F5FAF722FD6991B00AF9351 /* AuthenticationServices.framework in Frameworks */,
 				485D3D388DB39F0246ACB00F /* Pods_IrctcRailNova.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -115,6 +118,7 @@
 		571841F9CC8318872D8A4592 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				3F5FAF712FD6991B00AF9351 /* AuthenticationServices.framework */,
 				9739F9900EC2D50230380733 /* Pods_IrctcRailNova.framework */,
 			);
 			name = Frameworks;
@@ -458,6 +462,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = IrctcRailNova/IrctcRailNova.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";
@@ -493,6 +498,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = IrctcRailNova/IrctcRailNova.entitlements;
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = "";

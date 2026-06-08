@@ -10,9 +10,7 @@ import Firebase
 
 @main
 struct IrctcRailNovaApp: App {
-    @StateObject private var authViewModel = AuthViewModel(
-        authRepository: FirebaseAuthRepository.shared
-    )
+    @StateObject private var authManager = AuthManager()
     @State private var showSplash = true
 
     init() {
@@ -31,13 +29,11 @@ struct IrctcRailNovaApp: App {
                                 }
                             }
                         }
-                } else if authViewModel.isLoggedIn {
-                    MainTabView()
                 } else {
-                    AuthFlowContainerView()
+                    RootView()
                 }
             }
-            .environmentObject(authViewModel)
+            .environmentObject(authManager)
         }
     }
 }

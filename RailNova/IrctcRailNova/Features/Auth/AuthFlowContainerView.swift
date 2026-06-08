@@ -8,18 +8,19 @@
 import SwiftUI
 
 struct AuthFlowContainerView: View {
-    @EnvironmentObject var authVM: AuthViewModel
+    @State private var currentStep: AuthStep = .landing
 
     var body: some View {
-        switch authVM.currentStep {
+        switch currentStep {
         case .landing:
-            AuthView()
-        case .phoneEntry:
-            PhoneEntryView()
-        case .otpVerification:
-            OTPVerificationView()
-        case .complete:
-            AuthView()   // or a small success screen, then auto-dismiss
+            AuthView(currentStep: $currentStep)
+
+        case .login:
+            LoginView(currentStep: $currentStep)
+
+        case .signup:
+            SignupView(currentStep: $currentStep)
+
         }
     }
 }

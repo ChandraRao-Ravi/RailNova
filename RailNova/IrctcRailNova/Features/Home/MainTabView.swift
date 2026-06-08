@@ -18,7 +18,7 @@ enum MainTab {
 
 struct MainTabView: View {
     @State private var selectedTab: MainTab = .home
-    @EnvironmentObject var authVM: AuthViewModel
+    @EnvironmentObject var authManager: AuthManager
 
     var body: some View {
         TabView(selection: $selectedTab) {
@@ -39,7 +39,7 @@ struct MainTabView: View {
             .tag(MainTab.search)
 
             NavigationStack {
-                MyBookingsView(authVM: authVM)
+                MyBookingsView(authManager: authManager)
             }
             .tabItem {
                 Label("Bookings", systemImage: "ticket")

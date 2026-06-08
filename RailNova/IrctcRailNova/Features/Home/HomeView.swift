@@ -3,7 +3,7 @@ import SwiftUI
 // MARK: - Home View (Stub)
 
 struct HomeView: View {
-    @EnvironmentObject var authVM: AuthViewModel
+    @EnvironmentObject var authManger: AuthManager
     @StateObject private var searchVM = TrainSearchViewModel()
     
     var body: some View {
@@ -14,7 +14,7 @@ struct HomeView: View {
                     // Header
                     HStack {
                         VStack(alignment: .leading, spacing: 4) {
-                            if let user = authVM.currentUser?.name {
+                            if let user = authManger.currentUser?.fullName {
                                 Text("Hi, \(user) 👋")
                                     .font(RNTypography.headlineLarge)
                             } else {

@@ -15,14 +15,14 @@ final class MyBookingsViewModel: ObservableObject {
     @Published var errorMessage: String?
 
     private let bookingService = BookingService.shared
-    private let authVM: AuthViewModel
+    private let authManager: AuthManager
 
-    init(authVM: AuthViewModel) {
-        self.authVM = authVM
+    init(authManager: AuthManager) {
+        self.authManager = authManager
     }
 
     func loadBookings() async {
-        guard let user = authVM.currentUser else {
+        guard let user = authManager.currentUser else {
             errorMessage = "Please login to see your bookings."
             return
         }
@@ -36,10 +36,10 @@ final class MyBookingsViewModel: ObservableObject {
                 
                 // Minimal Train placeholder using only number + stations for now
                 let train = Train(
-                    number: dto.trainNumber,
-                    name: "Train \(dto.trainNumber)",
-                    from: dto.from,
-                    to: dto.to,
+                    number: dto.train_number ?? "",
+                    name: "Train \(dto.train_number ?? "")",
+                    from: dto.from_station ?? "",
+                    to: dto.to_station ?? "",
                     departureTime: "--:--",
                     arrivalTime: "--:--",
                     durationMinutes: 0,
@@ -48,17 +48,18 @@ final class MyBookingsViewModel: ObservableObject {
                 )
                 let formatter = DateFormatter()
                 formatter.dateFormat = "dd-MM-yyyy"
-                let date = formatter.date(from: dto.journeyDate) ?? Date()
-
+                let date = formatter.date(from: dto.journeyDate ?? "") ?? Date()
+                let fare = Double(dto.total_fare ?? "0")
+                
                 return Booking(
-                    id: dto.id,
-                    pnrNumber: dto.pnr,
+                    id: dto.id ?? "",
+                    pnrNumber: dto.pnr ?? "PNR_NA",
                     train: train,
                     journeyDate: date,
                     passengers: [],
                     travelClass: TravelClass.sleeperClass,
                     quota: .general,
-                    totalFare: dto.totalFare,
+                    totalFare: fare ?? 0.00,
                     convenienceFee: 0,
                     status: .confirmed,
                     bookedAt: Date(),

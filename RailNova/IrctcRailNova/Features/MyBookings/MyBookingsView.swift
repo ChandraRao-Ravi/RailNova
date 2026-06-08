@@ -8,9 +8,11 @@ struct MyBookingsView: View {
     @StateObject private var vm: MyBookingsViewModel
     
     init(
-        authVM: AuthViewModel
+        authManager: AuthManager
     ) {
-        _vm = StateObject(wrappedValue: MyBookingsViewModel(authVM: authVM))
+        _vm = StateObject(
+            wrappedValue: MyBookingsViewModel(authManager: authManager)
+        )
     }
 
     var body: some View {

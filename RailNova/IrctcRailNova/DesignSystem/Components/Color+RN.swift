@@ -1,3 +1,8 @@
+//
+//  Color+RN.swift
+//  IrctcRailNova
+//
+
 import SwiftUI
 
 extension Color {

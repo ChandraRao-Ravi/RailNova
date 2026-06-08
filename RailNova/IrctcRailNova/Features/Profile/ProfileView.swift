@@ -3,7 +3,7 @@ import SwiftUI
 // MARK: - Profile View (Stub)
 
 struct ProfileView: View {
-    @EnvironmentObject var authVM: AuthViewModel
+    @EnvironmentObject var authManager: AuthManager
     
     let menuItems: [(icon: String, title: String, subtitle: String, color: Color)] = [
         ("person.2.fill", "Passenger List", "Manage saved passengers", .blue),
@@ -21,7 +21,7 @@ struct ProfileView: View {
                     HStack(spacing: 16) {
                         
                         // avatar
-                        if let url = authVM.currentUser?.photoURL {
+                        if let url = authManager.currentUser?.fullName as? URL {
                             AsyncImage(url: url) { image in
                                 image.resizable().scaledToFill()
                             } placeholder: {
@@ -34,21 +34,26 @@ struct ProfileView: View {
                                 .fill(Color.railNovaSecondary)
                                 .frame(width: 80, height: 80)
                                 .overlay(
-                                    Text(String(authVM.currentUser?.name.prefix(1) ?? "A"))
+                                    Text(
+                                        String(
+                                            authManager.currentUser?.fullName?
+                                                .prefix(1) ?? "A"
+                                        )
+                                    )
                                         .font(.title)
                                         .foregroundColor(.white)
                                 )
                         }
                         
                         VStack(alignment: .leading, spacing: 4) {
-                            if let user = authVM.currentUser?.name {
+                            if let user = authManager.currentUser?.fullName {
                                 Text(user)
                                     .font(RNTypography.headlineSmall)
                             } else {
                                 Text("Hi, there")
                                     .font(RNTypography.headlineSmall)
                             }
-                            if let email = authVM.currentUser?.email {
+                            if let email = authManager.currentUser?.email {
                                 Text(email)
                                     .font(RNTypography.bodySmall)
                                     .foregroundColor(.railNovaTextSecondary)
@@ -91,7 +96,7 @@ struct ProfileView: View {
                 // Logout
                 Section {
                     Button(role: .destructive) {
-                        authVM.signOut()
+                        authManager.logout()
                     } label: {
                         Label("Logout", systemImage: "rectangle.portrait.and.arrow.right")
                     }

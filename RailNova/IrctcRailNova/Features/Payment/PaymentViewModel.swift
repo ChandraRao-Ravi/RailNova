@@ -17,12 +17,12 @@ final class PaymentViewModel: ObservableObject {
     @Published var isProcessing = false
     
     private let bookingService = BookingService.shared
-    let authVM: AuthViewModel  // injected
+    let authManager: AuthManager  // injected
     
     init(
-        authVM: AuthViewModel
+        authManager: AuthManager
     ) {
-        self.authVM = authVM
+        self.authManager = authManager
     }
     
     func confirmBooking(train: Train,
@@ -30,7 +30,7 @@ final class PaymentViewModel: ObservableObject {
                         fromStation: Station,
                         toStation: Station,
                         totalFare: Double) async {
-        guard let user = authVM.currentUser else {
+        guard let user = authManager.currentUser else {
             errorMessage = "Please login to continue."
             return
         }
@@ -55,10 +55,10 @@ final class PaymentViewModel: ObservableObject {
             
             // Minimal Train placeholder using only number + stations for now
             let train = Train(
-                number: dto.trainNumber,
-                name: "Train \(dto.trainNumber)",
-                from: dto.from,
-                to: dto.to,
+                number: dto.train_number ?? "",
+                name: "Train \(dto.train_number ?? "")",
+                from: dto.from_station ?? "",
+                to: dto.to_station ?? "",
                 departureTime: "--:--",
                 arrivalTime: "--:--",
                 durationMinutes: 0,
@@ -67,18 +67,19 @@ final class PaymentViewModel: ObservableObject {
             )
             let formatter = DateFormatter()
             formatter.dateFormat = "dd-MM-yyyy"
-            let date = formatter.date(from: dto.journeyDate) ?? Date()
-            
+            let date = formatter.date(from: dto.journeyDate ?? "") ?? Date()
+            let fare = Double(dto.total_fare ?? "0")
+
             // Map DTO -> your Booking model
             let confirmed = Booking(
-                id: dto.id,
-                pnrNumber: dto.pnr,
+                id: dto.id ?? "",
+                pnrNumber: dto.pnr ?? "",
                 train: train,
                 journeyDate: journeyDate,
                 passengers: [],         // fill from your passenger form
                 travelClass: .sleeperClass,
                 quota: .general,
-                totalFare: dto.totalFare,
+                totalFare: fare ?? 0.0,
                 convenienceFee: 0,
                 status: .confirmed,
                 bookedAt: Date(),

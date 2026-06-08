@@ -21,7 +21,8 @@ struct ReviewBookingView: View {
     @State private var selectedPaymentMethod: PaymentMethod = .upi
     @State private var navigateToPayment = false
     @State private var booking: Booking?
-    @EnvironmentObject var authVM: AuthViewModel
+    @EnvironmentObject var authManager: AuthManager
+
     @Binding var selectedTab: MainTab
 
     // Simple fare logic: per passenger fare
@@ -136,7 +137,7 @@ struct ReviewBookingView: View {
                         fromStation: fromStation,
                         toStation: toStation,
                         totalFare: totalAmount,
-                        authVM: authVM
+                        authManager: authManager
                     ) { booking in
                         selectedTab = MainTab.bookings
                     },

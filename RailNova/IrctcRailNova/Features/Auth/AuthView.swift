@@ -1,14 +1,20 @@
+//
+//  AuthManager.swift
+//  IrctcRailNova
+//
+//  Created by Chandra Rao on 08/06/26.
+//
 
+import AuthenticationServices
 import SwiftUI
 
-// MARK: - Auth View
-
 struct AuthView: View {
-    @EnvironmentObject var authVM: AuthViewModel
+    @Binding var currentStep: AuthStep
+    @EnvironmentObject var authManager: AuthManager
+    @State private var appleCoordinator: AppleSignInCoordinator?
     
     var body: some View {
         ZStack {
-            // Background gradient
             LinearGradient(
                 colors: [Color.railNovaPrimary, Color.railNovaSecondary.opacity(0.8)],
                 startPoint: .topLeading,
@@ -19,92 +25,102 @@ struct AuthView: View {
             VStack(spacing: 32) {
                 Spacer()
                 
-                // Logo & Title
                 VStack(spacing: 12) {
                     Image(systemName: "tram.fill")
                         .font(.system(size: 64))
                         .foregroundColor(.white)
+                    
                     Text("RailNova")
                         .font(RNTypography.displayLarge)
                         .foregroundColor(.white)
+                    
                     Text("Your journey, simplified.")
-                        .font(RNTypography.bodyLarge)
-                        .foregroundColor(.white.opacity(0.7))
+                        .font(.system(size: 19, weight: .medium))
+                        .foregroundColor(.white.opacity(0.72))
                 }
                 
                 Spacer()
                 
-                // Auth Buttons
                 VStack(spacing: 12) {
-                    // Google Sign In
                     Button {
-                        if let rootVC = UIApplication.shared
-                            .connectedScenes
-                            .compactMap({ $0 as? UIWindowScene })
-                            .flatMap({ $0.windows })
-                            .first(where: { $0.isKeyWindow })?
-                            .rootViewController {
-                            
-                            Task {
-                                await authVM.signInWithGoogle(from: rootVC)
-                            }
-                        }
+                        currentStep = .login
                     } label: {
-                        HStack {
-                            Image(systemName: "g.circle.fill")
-                                .font(.title2)
-                            Text("Continue with Google")
-                                .font(RNTypography.labelLarge)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 52)
+                        AuthButtonLabel(
+                            icon: "envelope.fill",
+                            title: "Login with Email",
+                            foreground: .black
+                        )
                         .background(Color.white)
-                        .foregroundColor(.black)
-                        .cornerRadius(12)
+                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                     }
                     
-                    // Apple Sign In
                     Button {
-                        // TODO: Apple Sign In
+                        currentStep = .signup
                     } label: {
-                        HStack {
-                            Image(systemName: "apple.logo")
-                                .font(.title2)
-                            Text("Continue with Apple")
-                                .font(RNTypography.labelLarge)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 52)
-                        .background(Color.black)
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
-                    }
-                    
-                    // Phone Sign In
-                    Button {
-                        authVM.currentStep = .phoneEntry
-                    } label: {
-                        HStack {
-                            Image(systemName: "phone.fill")
-                                .font(.title2)
-                            Text("Continue with Phone")
-                                .font(RNTypography.labelLarge)
-                        }
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 52)
+                        AuthButtonLabel(
+                            icon: "person.badge.plus.fill",
+                            title: "Create Account",
+                            foreground: .white
+                        )
                         .background(Color.white.opacity(0.15))
-                        .foregroundColor(.white)
-                        .cornerRadius(12)
+                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                         .overlay(
-                            RoundedRectangle(cornerRadius: 12)
-                                .stroke(Color.white.opacity(0.3), lineWidth: 1)
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .stroke(Color.white.opacity(0.25), lineWidth: 1)
                         )
                     }
                     
+                    Button {
+                        Task {
+                            await authManager.loginWithGoogle()
+                        }
+                    } label: {
+                        AuthButtonLabel(
+                            icon: "globe",
+                            title: "Continue with Google",
+                            foreground: .black
+                        )
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    }
+                    .disabled(authManager.isLoading)
+                    
+                    Button {
+                        Task {
+                            await authManager.loginWithApple()
+                        }
+                    } label: {
+                        AuthButtonLabel(
+                            icon: "applelogo",
+                            title: "Continue with Apple",
+                            foreground: .white
+                        )
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 64)
+                        .background(Color.black)
+                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                    }
+                    .disabled(authManager.isLoading)
+                    
+                    if authManager.isLoading {
+                        ProgressView()
+                            .tint(.white)
+                            .padding(.top, 8)
+                    }
+                    
+                    if let error = authManager.errorMessage, !error.isEmpty {
+                        Text(error)
+                            .font(RNTypography.labelMedium)
+                            .foregroundColor(.red.opacity(0.95))
+                            .multilineTextAlignment(.center)
+                            .padding(.top, 4)
+                    }
+
                     Text("By continuing you agree to our Terms & Conditions and Privacy Policy")
-                        .font(RNTypography.labelSmall)
-                        .foregroundColor(.white.opacity(0.6))
+                        .font(RNTypography.labelMedium)
+                        .foregroundColor(.white.opacity(0.68))
                         .multilineTextAlignment(.center)
+                        .padding(.top, 6)
                 }
                 .padding(.horizontal, 24)
                 .padding(.bottom, 40)

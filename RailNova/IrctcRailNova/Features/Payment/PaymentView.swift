@@ -25,7 +25,7 @@ struct PaymentView: View {
          fromStation: Station,
          toStation: Station,
          totalFare: Double,
-         authVM: AuthViewModel,
+         authManager: AuthManager,
          onBookingConfirmed: @escaping (Booking) -> Void) {
         self.train = train
         self.journeyDate = journeyDate
@@ -35,7 +35,7 @@ struct PaymentView: View {
         self.onBookingConfirmed = onBookingConfirmed
 
         // vm will be initialized in body once we have authVM
-        _vm = StateObject(wrappedValue: PaymentViewModel(authVM: authVM))
+        _vm = StateObject(wrappedValue: PaymentViewModel(authManager: authManager))
     }
 
     var body: some View {
